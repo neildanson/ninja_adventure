@@ -1,19 +1,13 @@
-mod components;
-mod constants;
-mod levels;
-mod plugins;
-mod systems;
-
 use bevy::prelude::*;
 use bevy_ecs_ldtk::prelude::*;
 use bevy_rapier2d::prelude::*;
 use iyes_loopless::prelude::*;
 use leafwing_input_manager::prelude::*;
 
-use components::*;
-use levels::*;
-use plugins::*;
-use systems::*;
+use ninja_adventure::components::*;
+use ninja_adventure::levels::*;
+use ninja_adventure::plugins::*;
+use ninja_adventure::systems::*;
 
 fn startup(mut commands: Commands) {
     commands.spawn(Camera2dBundle {
