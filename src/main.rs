@@ -55,12 +55,14 @@ fn main() {
         .add_system_set(
             ConditionSet::new()
                 .run_in_state(GameState::InGame)
+                .with_system(spawn_wall_collision)
                 .with_system(player_input)
                 .with_system(camera_follow)
                 .into(),
         )
         .add_system_set(ConditionSet::new().run_in_state(GameState::GameOver).into())
         .register_ldtk_int_cell::<FloorBundle>(1)
+        .register_ldtk_int_cell::<WallBundle>(2)
         .register_ldtk_entity::<PlayerEntityBundle>("PlayerStart")
         .run();
 }
