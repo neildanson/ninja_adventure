@@ -29,6 +29,8 @@ pub enum Action {
     RunRight,
     RunUp,
     RunDown,
+    Attack,
+    Interact
 }
 
 #[derive(Component, Deref, DerefMut, Default, Clone)]
@@ -59,8 +61,9 @@ impl From<EntityInstance> for PlayerBundle {
                     (KeyCode::Left, Action::RunLeft),
                     (KeyCode::Down, Action::RunDown),
                     (KeyCode::Right, Action::RunRight),
+                    (KeyCode::Space, Action::Attack),
+                    (KeyCode::Return, Action::Interact),
                 ]),
-                ..default()
             },
 
             _ => PlayerBundle::default(),
