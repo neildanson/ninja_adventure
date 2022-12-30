@@ -5,7 +5,7 @@ use bevy_rapier2d::render::RapierDebugRenderPlugin;
 pub struct DebugPlugin;
 
 impl Plugin for DebugPlugin {
-    fn build(&self, app : &mut App) {
+    fn build(&self, app: &mut App) {
         app.add_system(close_on_esc);
     }
 }
