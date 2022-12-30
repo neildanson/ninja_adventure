@@ -1,5 +1,6 @@
 use bevy::prelude::*;
-use bevy_rapier2d::prelude::KinematicCharacterController;
+use bevy_rapier2d::prelude::*;
+use leafwing_input_manager::prelude::*;
 
 use crate::components::*;
 
@@ -26,20 +27,19 @@ fn update_translation(t: Option<Vec2>, d: Vec2) -> Option<Vec2> {
 }
 
 pub fn player_input(
-    keys: Res<Input<KeyCode>>,
-    mut query: Query<&mut KinematicCharacterController, With<Player>>,
+    mut query: Query<(&mut KinematicCharacterController, &ActionState<Action>), With<Player>>,
 ) {
-    for mut controller in query.iter_mut() {
+    for (mut controller, action) in query.iter_mut() {
         let mut direction: Option<Vec2> = None;
-        if keys.pressed(KeyCode::Left) {
+        if action.pressed(Action::RunLeft) {
             direction = update_translation(direction, Vec2::NEG_X);
-        } else if keys.pressed(KeyCode::Right) {
+        } else if action.pressed(Action::RunRight) {
             direction = update_translation(direction, Vec2::X);
         }
 
-        if keys.pressed(KeyCode::Up) {
+        if action.pressed(Action::RunUp){
             direction = update_translation(direction, Vec2::Y);
-        } else if keys.pressed(KeyCode::Down) {
+        } else if action.pressed(Action::RunDown) {
             direction = update_translation(direction, Vec2::NEG_Y);
         }
         controller.translation = direction;

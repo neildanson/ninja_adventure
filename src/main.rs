@@ -8,6 +8,7 @@ use bevy::prelude::*;
 use bevy_ecs_ldtk::prelude::*;
 use bevy_rapier2d::prelude::*;
 use iyes_loopless::prelude::*;
+use leafwing_input_manager::prelude::*;
 
 use components::*;
 use constants::*;
@@ -41,6 +42,7 @@ fn main() {
                 .set(ImagePlugin::default_nearest()),
         )
         .add_startup_system(startup)
+        //LDTK
         .add_plugin(LdtkPlugin)
         .insert_resource(LdtkSettings {
             level_spawn_behavior: LevelSpawnBehavior::UseWorldTranslation {
@@ -49,7 +51,10 @@ fn main() {
             set_clear_color: SetClearColor::FromLevelBackground,
             ..Default::default()
         })
+        //Rapier2D
         .add_plugin(RapierPhysicsPlugin::<NoUserData>::default())
+        .add_plugin(InputManagerPlugin::<Action>::default())
+        //Custom Debug Plugins
         .add_plugins(DebugPlugins)
         .add_loopless_state(GameState::InGame)
         .add_enter_system(GameState::InGame, level_startup)
