@@ -39,9 +39,9 @@ pub struct AnimationTimer(pub Timer);
 #[derive(Clone, Bundle, LdtkIntCell, Default)]
 pub struct PlayerBundle {
     pub rigid_body: RigidBody,
+    pub velocity : Velocity,
+    pub locked_axes : LockedAxes,
     pub collider: Collider,
-
-    pub controller: KinematicCharacterController,
     pub animation_timer: AnimationTimer,
     pub action_state: ActionState<ControllerAction>,
     pub input_map: InputMap<ControllerAction>,
@@ -51,9 +51,10 @@ impl From<EntityInstance> for PlayerBundle {
     fn from(entity_instance: EntityInstance) -> PlayerBundle {
         match entity_instance.identifier.as_ref() {
             "PlayerStart" => PlayerBundle {
-                rigid_body: RigidBody::KinematicPositionBased,
+                rigid_body: RigidBody::Dynamic,
+                velocity: Velocity::default(),
+                locked_axes: LockedAxes::ROTATION_LOCKED,
                 collider: Collider::cuboid(PLAYER_WIDTH / 2.0, PLAYER_HEIGHT / 2.0),
-                controller: KinematicCharacterController{ max_slope_climb_angle : 1.0, ..default()},
                 animation_timer: AnimationTimer(Timer::from_seconds(0.20, TimerMode::Repeating)),
                 action_state: ActionState::default(),
                 input_map: InputMap::new([

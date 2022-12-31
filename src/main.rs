@@ -46,6 +46,8 @@ fn main() {
         })
         //Rapier2D
         .add_plugin(RapierPhysicsPlugin::<NoUserData>::default())
+        .insert_resource(RapierConfiguration { gravity : Vec2::ZERO, ..default()})
+        //Leafless
         .add_plugin(InputManagerPlugin::<ControllerAction>::default())
         //Custom Debug Plugins
         .add_plugins(DebugPlugins)

@@ -18,38 +18,28 @@ pub fn camera_follow(
         );
     }
 }
-
-fn update_translation(t: Option<Vec2>, d: Vec2) -> Option<Vec2> {
-    match t {
-        Some(t) => Some(t + d),
-        None => Some(d),
-    }
-}
-
 pub fn player_input(
     mut query: Query<
         (
-            &mut KinematicCharacterController,
+            &mut Velocity,
             &ActionState<ControllerAction>,
         ),
         With<Player>,
     >,
 ) {
-    for (mut controller, action) in query.iter_mut() {
-        controller.autostep = None;
-        let mut direction: Option<Vec2> = None;
-
+    for (mut velocity, action) in query.iter_mut() {
+        let mut direction = Vec2::ZERO;
         if action.pressed(ControllerAction::RunLeft) {
-            direction = update_translation(direction, Vec2::NEG_X);
+            direction += Vec2::NEG_X;
         } else if action.pressed(ControllerAction::RunRight) {
-            direction = update_translation(direction, Vec2::X);
+            direction += Vec2::X;
         }
 
         if action.pressed(ControllerAction::RunUp) {
-            direction = update_translation(direction, Vec2::Y);
+            direction += Vec2::Y;
         } else if action.pressed(ControllerAction::RunDown) {
-            direction = update_translation(direction, Vec2::NEG_Y);
+            direction += Vec2::NEG_Y;
         }
-        controller.translation = direction;
+        velocity.linvel = direction * 60.0;
     }
 }
