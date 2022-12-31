@@ -46,7 +46,7 @@ fn main() {
         })
         //Rapier2D
         .add_plugin(RapierPhysicsPlugin::<NoUserData>::default())
-        .add_plugin(InputManagerPlugin::<Action>::default())
+        .add_plugin(InputManagerPlugin::<ControllerAction>::default())
         //Custom Debug Plugins
         .add_plugins(DebugPlugins)
         .add_loopless_state(GameState::InGame)

@@ -27,19 +27,27 @@ fn update_translation(t: Option<Vec2>, d: Vec2) -> Option<Vec2> {
 }
 
 pub fn player_input(
-    mut query: Query<(&mut KinematicCharacterController, &ActionState<Action>), With<Player>>,
+    mut query: Query<
+        (
+            &mut KinematicCharacterController,
+            &ActionState<ControllerAction>,
+        ),
+        With<Player>,
+    >,
 ) {
     for (mut controller, action) in query.iter_mut() {
+        controller.autostep = None;
         let mut direction: Option<Vec2> = None;
-        if action.pressed(Action::RunLeft) {
+
+        if action.pressed(ControllerAction::RunLeft) {
             direction = update_translation(direction, Vec2::NEG_X);
-        } else if action.pressed(Action::RunRight) {
+        } else if action.pressed(ControllerAction::RunRight) {
             direction = update_translation(direction, Vec2::X);
         }
 
-        if action.pressed(Action::RunUp){
+        if action.pressed(ControllerAction::RunUp) {
             direction = update_translation(direction, Vec2::Y);
-        } else if action.pressed(Action::RunDown) {
+        } else if action.pressed(ControllerAction::RunDown) {
             direction = update_translation(direction, Vec2::NEG_Y);
         }
         controller.translation = direction;

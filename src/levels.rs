@@ -18,8 +18,6 @@ pub fn level_startup(mut commands: Commands, asset_server: Res<AssetServer>, aud
     );
 }
 
-
-
 #[derive(Copy, Clone, Eq, PartialEq, Debug, Default, Component)]
 pub struct Wall;
 
@@ -172,7 +170,6 @@ pub fn spawn_wall_collision(
                             ))
                             .insert(RigidBody::Fixed)
                             .insert(ColliderDebugColor(Color::RED))
-                            //.insert(Friction::new(1.0))
                             .insert(Transform::from_xyz(
                                 (wall_rect.left + wall_rect.right + 1) as f32 * grid_size as f32
                                     / 2.,

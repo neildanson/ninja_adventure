@@ -24,13 +24,13 @@ pub struct FloorBundle {
 pub struct Player;
 
 #[derive(Actionlike, PartialEq, Eq, Clone, Copy, Hash, Debug)]
-pub enum Action {
+pub enum ControllerAction {
     RunLeft,
     RunRight,
     RunUp,
     RunDown,
     Attack,
-    Interact
+    Interact,
 }
 
 #[derive(Component, Deref, DerefMut, Default, Clone)]
@@ -43,8 +43,8 @@ pub struct PlayerBundle {
 
     pub controller: KinematicCharacterController,
     pub animation_timer: AnimationTimer,
-    pub action_state: ActionState<Action>,
-    pub input_map: InputMap<Action>,
+    pub action_state: ActionState<ControllerAction>,
+    pub input_map: InputMap<ControllerAction>,
 }
 
 impl From<EntityInstance> for PlayerBundle {
@@ -53,16 +53,16 @@ impl From<EntityInstance> for PlayerBundle {
             "PlayerStart" => PlayerBundle {
                 rigid_body: RigidBody::KinematicPositionBased,
                 collider: Collider::cuboid(PLAYER_WIDTH / 2.0, PLAYER_HEIGHT / 2.0),
-                controller: KinematicCharacterController::default(),
+                controller: KinematicCharacterController{ max_slope_climb_angle : 1.0, ..default()},
                 animation_timer: AnimationTimer(Timer::from_seconds(0.20, TimerMode::Repeating)),
                 action_state: ActionState::default(),
                 input_map: InputMap::new([
-                    (KeyCode::Up, Action::RunUp),
-                    (KeyCode::Left, Action::RunLeft),
-                    (KeyCode::Down, Action::RunDown),
-                    (KeyCode::Right, Action::RunRight),
-                    (KeyCode::Space, Action::Attack),
-                    (KeyCode::Return, Action::Interact),
+                    (KeyCode::Up, ControllerAction::RunUp),
+                    (KeyCode::Left, ControllerAction::RunLeft),
+                    (KeyCode::Down, ControllerAction::RunDown),
+                    (KeyCode::Right, ControllerAction::RunRight),
+                    (KeyCode::Space, ControllerAction::Attack),
+                    (KeyCode::Return, ControllerAction::Interact),
                 ]),
             },
 
