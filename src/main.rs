@@ -60,6 +60,7 @@ fn main() {
                 .with_system(spawn_wall_collision)
                 .with_system(player_input)
                 .with_system(camera_follow)
+                .with_system(animate)
                 .into(),
         )
         .add_system_set(ConditionSet::new().run_in_state(GameState::GameOver).into())

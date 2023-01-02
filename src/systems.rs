@@ -43,3 +43,14 @@ pub fn player_input(
         velocity.linvel = direction * 60.0;
     }
 }
+
+
+pub fn animate(
+    time: Res<Time>, mut query: Query<(&mut TextureAtlasSprite,  &mut AnimationTimer)>) {
+        for (mut sprite, mut timer) in query.iter_mut() {
+            timer.tick(time.delta());
+            if timer.just_finished() {
+                sprite.index = (sprite.index + 4) % 16;
+            }
+        }
+    }
