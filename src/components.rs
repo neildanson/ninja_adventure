@@ -3,7 +3,7 @@ use bevy_ecs_ldtk::prelude::*;
 use bevy_rapier2d::prelude::*;
 use leafwing_input_manager::prelude::*;
 
-use crate::constants::{PLAYER_HEIGHT, PLAYER_WIDTH};
+use crate::constants::*;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum GameState {
@@ -37,10 +37,22 @@ pub enum ControllerAction {
 pub enum PlayerState {
     #[default]
     Idle,
-    RunLeft,
-    RunRight,
-    RunUp,
-    RunDown,
+    RunLeft(usize),
+    RunRight(usize),
+    RunUp(usize),
+    RunDown(usize),
+}
+
+impl PlayerState {
+    pub fn frame(&self) -> usize {
+        match self {
+            PlayerState::Idle => 0,
+            PlayerState::RunLeft(f) => *f,
+            PlayerState::RunRight(f) => *f,
+            PlayerState::RunUp(f) => *f,
+            PlayerState::RunDown(f) => *f,
+        }
+    }
 }
 
 #[derive(Component, Deref, DerefMut, Default, Clone)]
@@ -66,7 +78,7 @@ impl From<EntityInstance> for PlayerBundle {
                 velocity: Velocity::default(),
                 locked_axes: LockedAxes::ROTATION_LOCKED,
                 collider: Collider::cuboid(PLAYER_WIDTH / 2.0, PLAYER_HEIGHT / 2.0),
-                animation_timer: AnimationTimer(Timer::from_seconds(0.20, TimerMode::Repeating)),
+                animation_timer: AnimationTimer(Timer::from_seconds(ANIM_TIMER, TimerMode::Repeating)),
                 action_state: ActionState::default(),
                 input_map: InputMap::new([
                     (KeyCode::Up, ControllerAction::RunUp),

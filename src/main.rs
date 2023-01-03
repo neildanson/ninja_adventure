@@ -12,7 +12,7 @@ use ninja_adventure::systems::*;
 fn startup(mut commands: Commands) {
     commands.spawn(Camera2dBundle {
         projection: OrthographicProjection {
-            scale: 0.25,
+            scale: 0.4,
             ..default()
         },
         ..default()
