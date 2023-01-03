@@ -20,19 +20,24 @@ pub fn camera_follow(
 }
 pub fn player_input(
     time: Res<Time>,
-    mut query: Query<(&mut Velocity, &ActionState<ControllerAction>), With<Player>>,
+    mut query: Query<(&mut Velocity, &mut PlayerState,  &ActionState<ControllerAction>), With<Player>>,
 ) {
-    for (mut velocity, action) in query.iter_mut() {
+    for (mut velocity, mut state, action) in query.iter_mut() {
         let mut direction = Vec2::ZERO;
+        *state = PlayerState::Idle;
         if action.pressed(ControllerAction::RunLeft) {
+            *state = PlayerState::RunLeft;
             direction += Vec2::NEG_X;
         } else if action.pressed(ControllerAction::RunRight) {
+            *state = PlayerState::RunRight;
             direction += Vec2::X;
         }
 
         if action.pressed(ControllerAction::RunUp) {
+            *state = PlayerState::RunUp;
             direction += Vec2::Y;
         } else if action.pressed(ControllerAction::RunDown) {
+            *state = PlayerState::RunDown;
             direction += Vec2::NEG_Y;
         }
         velocity.linvel = direction * time.delta().as_secs_f32() * 7500.0;
