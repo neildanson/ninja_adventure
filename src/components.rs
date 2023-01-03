@@ -33,7 +33,8 @@ pub enum ControllerAction {
     Interact,
 }
 
-#[derive(Component, Default, Clone)]
+#[derive(Component, Default, Clone, Reflect)]
+#[reflect(Component)]
 pub enum PlayerState {
     #[default]
     Idle,
@@ -51,6 +52,16 @@ impl PlayerState {
             PlayerState::RunRight(f) => *f,
             PlayerState::RunUp(f) => *f,
             PlayerState::RunDown(f) => *f,
+        }
+    }
+
+    pub fn update(&self) -> Self {
+        match self {
+            PlayerState::Idle => PlayerState::Idle,
+            PlayerState::RunLeft(f) => PlayerState::RunLeft((*f + NUM_ANIM_FRAMES) % ANIM_FRAMES),
+            PlayerState::RunRight(f) => PlayerState::RunRight((*f + NUM_ANIM_FRAMES) % ANIM_FRAMES),
+            PlayerState::RunUp(f) => PlayerState::RunUp((*f + NUM_ANIM_FRAMES) % ANIM_FRAMES),
+            PlayerState::RunDown(f) => PlayerState::RunDown((*f + NUM_ANIM_FRAMES) % ANIM_FRAMES),
         }
     }
 }
@@ -78,7 +89,10 @@ impl From<EntityInstance> for PlayerBundle {
                 velocity: Velocity::default(),
                 locked_axes: LockedAxes::ROTATION_LOCKED,
                 collider: Collider::cuboid(PLAYER_WIDTH / 2.0, PLAYER_HEIGHT / 2.0),
-                animation_timer: AnimationTimer(Timer::from_seconds(ANIM_TIMER, TimerMode::Repeating)),
+                animation_timer: AnimationTimer(Timer::from_seconds(
+                    ANIM_TIMER,
+                    TimerMode::Repeating,
+                )),
                 action_state: ActionState::default(),
                 input_map: InputMap::new([
                     (KeyCode::Up, ControllerAction::RunUp),

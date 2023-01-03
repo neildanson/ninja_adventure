@@ -70,5 +70,6 @@ fn main() {
         .register_ldtk_int_cell::<FloorBundle>(1)
         .register_ldtk_int_cell::<WallBundle>(2)
         .register_ldtk_entity::<PlayerEntityBundle>("PlayerStart")
+        .register_type::<PlayerState>()
         .run();
 }

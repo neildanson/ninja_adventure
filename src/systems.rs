@@ -47,36 +47,14 @@ pub fn player_input(
         velocity.linvel = direction * time.delta().as_secs_f32() * RUN_SPEED;
 
         //If something is just pressed, set the state to its 1st frame
-        //If it is pressed then increment the frame and check bounds
         //If nothing is pressed, default to idle
         let mut new_state = None;
-        if action.pressed(ControllerAction::RunLeft) {
-            if action.just_pressed(ControllerAction::RunLeft) {
-                new_state = Some(PlayerState::RunLeft(2));
-            } else {
-                let frame = (state.frame() + 4) % ANIM_FRAMES;
-
-                new_state = Some(PlayerState::RunLeft(frame));
-            }
-        }
-
-        if action.pressed(ControllerAction::RunRight) {
-            if action.just_pressed(ControllerAction::RunRight) {
-                new_state = Some(PlayerState::RunRight(3));
-            } else {
-                let frame = (state.frame() + 4) % ANIM_FRAMES;
-
-                new_state = Some(PlayerState::RunRight(frame));
-            }
-        }
 
         if action.pressed(ControllerAction::RunUp) {
             if action.just_pressed(ControllerAction::RunUp) {
                 new_state = Some(PlayerState::RunUp(1));
             } else {
-                let frame = (state.frame() + 4) % ANIM_FRAMES;
-
-                new_state = Some(PlayerState::RunUp(frame));
+                new_state = Some(state.clone());
             }
         }
 
@@ -84,12 +62,25 @@ pub fn player_input(
             if action.just_pressed(ControllerAction::RunDown) {
                 new_state = Some(PlayerState::RunDown(0));
             } else {
-                let frame = (state.frame() + 4) % ANIM_FRAMES;
-
-                new_state = Some(PlayerState::RunDown(frame));
+                new_state = Some(state.clone());
             }
         }
 
+        if action.pressed(ControllerAction::RunLeft) {
+            if action.just_pressed(ControllerAction::RunLeft) {
+                new_state = Some(PlayerState::RunLeft(2));
+            } else {
+                new_state = Some(state.clone());
+            }
+        }
+
+        if action.pressed(ControllerAction::RunRight) {
+            if action.just_pressed(ControllerAction::RunRight) {
+                new_state = Some(PlayerState::RunRight(3));
+            } else {
+                new_state = Some(state.clone());
+            }
+        }
 
         *state = new_state.unwrap_or(PlayerState::Idle);
     }
@@ -97,11 +88,12 @@ pub fn player_input(
 
 pub fn animate(
     time: Res<Time>,
-    mut query: Query<(&PlayerState, &mut TextureAtlasSprite, &mut AnimationTimer)>,
+    mut query: Query<(&mut PlayerState, &mut TextureAtlasSprite, &mut AnimationTimer)>,
 ) {
-    for (state, mut sprite, mut timer) in query.iter_mut() {
+    for (mut state, mut sprite, mut timer) in query.iter_mut() {
         timer.tick(time.delta());
         sprite.index = if timer.just_finished() {
+            *state = state.update();
             state.frame()
         } else {
             sprite.index
