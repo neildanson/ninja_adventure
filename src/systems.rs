@@ -19,13 +19,7 @@ pub fn camera_follow(
     }
 }
 pub fn player_input(
-    mut query: Query<
-        (
-            &mut Velocity,
-            &ActionState<ControllerAction>,
-        ),
-        With<Player>,
-    >,
+    mut query: Query<(&mut Velocity, &ActionState<ControllerAction>), With<Player>>,
 ) {
     for (mut velocity, action) in query.iter_mut() {
         let mut direction = Vec2::ZERO;
@@ -44,13 +38,11 @@ pub fn player_input(
     }
 }
 
-
-pub fn animate(
-    time: Res<Time>, mut query: Query<(&mut TextureAtlasSprite,  &mut AnimationTimer)>) {
-        for (mut sprite, mut timer) in query.iter_mut() {
-            timer.tick(time.delta());
-            if timer.just_finished() {
-                sprite.index = (sprite.index + 4) % 16;
-            }
+pub fn animate(time: Res<Time>, mut query: Query<(&mut TextureAtlasSprite, &mut AnimationTimer)>) {
+    for (mut sprite, mut timer) in query.iter_mut() {
+        timer.tick(time.delta());
+        if timer.just_finished() {
+            sprite.index = (sprite.index + 4) % 16;
         }
     }
+}
