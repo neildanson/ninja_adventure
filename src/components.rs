@@ -91,7 +91,7 @@ pub struct PlayerEntityBundle {
     pub player_bundle: PlayerBundle,
 
     #[sprite_sheet_bundle(
-        "Source/NinjaAdventure/Actor/Characters/RedNinja2/SpriteSheet.png",
+        "Source/NinjaAdventure/Actor/Characters/GreenNinja/SpriteSheet.png",
         16.0,
         16.0,
         4,
