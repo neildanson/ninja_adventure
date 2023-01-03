@@ -19,6 +19,7 @@ pub fn camera_follow(
     }
 }
 pub fn player_input(
+    time: Res<Time>,
     mut query: Query<(&mut Velocity, &ActionState<ControllerAction>), With<Player>>,
 ) {
     for (mut velocity, action) in query.iter_mut() {
@@ -34,15 +35,23 @@ pub fn player_input(
         } else if action.pressed(ControllerAction::RunDown) {
             direction += Vec2::NEG_Y;
         }
-        velocity.linvel = direction * 60.0;
+        velocity.linvel = direction * time.delta().as_secs_f32() * 7500.0;
     }
 }
 
-pub fn animate(time: Res<Time>, mut query: Query<(&mut TextureAtlasSprite, &mut AnimationTimer)>) {
-    for (mut sprite, mut timer) in query.iter_mut() {
+pub fn animate(time: Res<Time>, mut query: Query<(&PlayerState, &mut TextureAtlasSprite, &mut AnimationTimer)>) {
+    for (state, mut sprite, mut timer) in query.iter_mut() {
         timer.tick(time.delta());
-        if timer.just_finished() {
-            sprite.index = (sprite.index + 4) % 16;
-        }
+        sprite.index = 
+            match state {
+                PlayerState::Idle => 0,
+                _ => {
+                    if timer.just_finished() {
+                        (sprite.index + 4) % 16
+                    } else {
+                        sprite.index
+                    }
+                }
+            }
     }
 }
