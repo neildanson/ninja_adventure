@@ -33,18 +33,29 @@ pub enum ControllerAction {
     Interact,
 }
 
+#[derive(Component, Default, Clone)]
+pub enum PlayerState {
+    #[default]
+    Idle,
+    RunLeft,
+    RunRight,
+    RunUp,
+    RunDown,
+}
+
 #[derive(Component, Deref, DerefMut, Default, Clone)]
 pub struct AnimationTimer(pub Timer);
 
 #[derive(Clone, Bundle, LdtkIntCell, Default)]
 pub struct PlayerBundle {
     pub rigid_body: RigidBody,
-    pub velocity : Velocity,
-    pub locked_axes : LockedAxes,
+    pub velocity: Velocity,
+    pub locked_axes: LockedAxes,
     pub collider: Collider,
     pub animation_timer: AnimationTimer,
     pub action_state: ActionState<ControllerAction>,
     pub input_map: InputMap<ControllerAction>,
+    pub player_state: PlayerState,
 }
 
 impl From<EntityInstance> for PlayerBundle {
@@ -65,6 +76,7 @@ impl From<EntityInstance> for PlayerBundle {
                     (KeyCode::Space, ControllerAction::Attack),
                     (KeyCode::Return, ControllerAction::Interact),
                 ]),
+                ..default()
             },
 
             _ => PlayerBundle::default(),
