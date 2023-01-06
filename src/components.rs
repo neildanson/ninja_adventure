@@ -69,7 +69,7 @@ impl PlayerState {
 #[derive(Component, Deref, DerefMut, Default, Clone)]
 pub struct AnimationTimer(pub Timer);
 
-#[derive(Clone, Bundle, LdtkIntCell, Default)]
+#[derive(Bundle, LdtkIntCell, Default)]
 pub struct PlayerBundle {
     pub rigid_body: RigidBody,
     pub velocity: Velocity,
@@ -110,7 +110,7 @@ impl From<EntityInstance> for PlayerBundle {
     }
 }
 
-#[derive(Clone, Bundle, LdtkEntity, Default)]
+#[derive(Bundle, LdtkEntity, Default)]
 pub struct PlayerEntityBundle {
     #[from_entity_instance]
     #[bundle]

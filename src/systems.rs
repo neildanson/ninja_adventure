@@ -6,17 +6,21 @@ use crate::components::*;
 use crate::constants::*;
 
 pub fn camera_follow(
-    player: Query<&mut Transform, (With<Player>, Without<Camera>)>,
-    mut camera: Query<&mut Transform, (With<Camera>, Without<Player>)>,
+    mut is_set: Local<bool>,
+    mut commands: Commands,
+    player: Query<Entity, With<Player>>,
+    camera: Query<Entity, With<Camera>>,
 ) {
-    let mut camera = camera.single_mut();
+    if !*is_set {
+        for p in player.iter() {
+            for c in camera.iter() {
+                let player = commands.entity(p).id();
+                let camera = commands.entity(c).id();
+                commands.entity(player).push_children(&[camera]);
 
-    for player in player.iter() {
-        camera.translation = Vec3::new(
-            player.translation.x,
-            player.translation.y,
-            camera.translation.z,
-        );
+                *is_set = true;
+            }
+        }
     }
 }
 pub fn player_input(
@@ -88,7 +92,11 @@ pub fn player_input(
 
 pub fn animate(
     time: Res<Time>,
-    mut query: Query<(&mut PlayerState, &mut TextureAtlasSprite, &mut AnimationTimer)>,
+    mut query: Query<(
+        &mut PlayerState,
+        &mut TextureAtlasSprite,
+        &mut AnimationTimer,
+    )>,
 ) {
     for (mut state, mut sprite, mut timer) in query.iter_mut() {
         timer.tick(time.delta());

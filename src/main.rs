@@ -15,6 +15,7 @@ fn startup(mut commands: Commands) {
             scale: 0.4,
             ..default()
         },
+        transform : Transform::from_translation(Vec3::new(0.0,0.0,10.0)),
         ..default()
     });
 }
