@@ -54,17 +54,17 @@ pub fn player_input(
         //If nothing is pressed, default to idle
         let mut new_state = None;
 
-        if action.pressed(ControllerAction::RunUp) {
-            if action.just_pressed(ControllerAction::RunUp) {
-                new_state = Some(PlayerState::RunUp(1));
+        if action.pressed(ControllerAction::RunDown) {
+            if action.just_pressed(ControllerAction::RunDown) {
+                new_state = Some(PlayerState::RunDown(0));
             } else {
                 new_state = Some(state.clone());
             }
         }
 
-        if action.pressed(ControllerAction::RunDown) {
-            if action.just_pressed(ControllerAction::RunDown) {
-                new_state = Some(PlayerState::RunDown(0));
+        if action.pressed(ControllerAction::RunUp) {
+            if action.just_pressed(ControllerAction::RunUp) {
+                new_state = Some(PlayerState::RunUp(1));
             } else {
                 new_state = Some(state.clone());
             }
@@ -100,11 +100,9 @@ pub fn animate(
 ) {
     for (mut state, mut sprite, mut timer) in query.iter_mut() {
         timer.tick(time.delta());
-        sprite.index = if timer.just_finished() {
-            *state = state.update();
-            state.frame()
-        } else {
-            sprite.index
-        }
+        if timer.just_finished() {
+            *state = state.update();  
+        } 
+        sprite.index = state.frame();
     }
 }
