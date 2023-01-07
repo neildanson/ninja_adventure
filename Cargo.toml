@@ -12,3 +12,4 @@ iyes_loopless = "0.9.1"
 bevy_rapier2d = { version = "0.19.0", features = ["simd-stable"]}
 bevy-inspector-egui = "0.15.0"
 leafwing-input-manager = "0.7.1"
+bevy_pixel_camera = "0.3.0"
