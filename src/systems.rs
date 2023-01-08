@@ -52,41 +52,39 @@ pub fn player_input(
 
         //If something is just pressed, set the state to its 1st frame
         //If nothing is pressed, default to idle
-        let mut new_state = None;
 
-        if action.pressed(ControllerAction::RunDown) {
-            if action.just_pressed(ControllerAction::RunDown) {
-                new_state = Some(PlayerState::RunDown(0));
-            } else {
-                new_state = Some(state.clone());
-            }
+        if action.just_released(ControllerAction::RunDown) {
+            *state  = PlayerState::Idle;
+        } 
+
+        if action.just_released(ControllerAction::RunUp) {
+            *state  = PlayerState::Idle;
         }
 
-        if action.pressed(ControllerAction::RunUp) {
-            if action.just_pressed(ControllerAction::RunUp) {
-                new_state = Some(PlayerState::RunUp(1));
-            } else {
-                new_state = Some(state.clone());
-            }
+        if action.just_released(ControllerAction::RunLeft) {
+            *state = PlayerState::Idle;
+        } 
+
+        if action.just_released(ControllerAction::RunRight) {
+            *state = PlayerState::Idle;
         }
 
-        if action.pressed(ControllerAction::RunLeft) {
-            if action.just_pressed(ControllerAction::RunLeft) {
-                new_state = Some(PlayerState::RunLeft(2));
-            } else {
-                new_state = Some(state.clone());
-            }
+
+        if action.just_pressed(ControllerAction::RunDown) {
+            *state  = PlayerState::RunDown(0);
+        } 
+
+        if action.just_pressed(ControllerAction::RunUp) {
+            *state  = PlayerState::RunUp(1);
         }
 
-        if action.pressed(ControllerAction::RunRight) {
-            if action.just_pressed(ControllerAction::RunRight) {
-                new_state = Some(PlayerState::RunRight(3));
-            } else {
-                new_state = Some(state.clone());
-            }
-        }
+        if action.just_pressed(ControllerAction::RunLeft) {
+            *state  = PlayerState::RunLeft(2);
+        } 
 
-        *state = new_state.unwrap_or(PlayerState::Idle);
+        if action.just_pressed(ControllerAction::RunRight) {
+            *state  = PlayerState::RunRight(3);
+        }
     }
 }
 
@@ -101,8 +99,8 @@ pub fn animate(
     for (mut state, mut sprite, mut timer) in query.iter_mut() {
         timer.tick(time.delta());
         if timer.just_finished() {
-            *state = state.update();  
-        } 
+            *state = state.update();
+        }
         sprite.index = state.frame();
     }
 }

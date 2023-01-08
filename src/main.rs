@@ -1,9 +1,9 @@
 use bevy::prelude::*;
 use bevy_ecs_ldtk::prelude::*;
+use bevy_pixel_camera::{PixelCameraBundle, PixelCameraPlugin};
 use bevy_rapier2d::prelude::*;
 use iyes_loopless::prelude::*;
 use leafwing_input_manager::prelude::*;
-use bevy_pixel_camera::{PixelCameraBundle, PixelCameraPlugin};
 
 use ninja_adventure::components::*;
 use ninja_adventure::levels::*;
@@ -12,7 +12,7 @@ use ninja_adventure::systems::*;
 
 fn startup(mut commands: Commands) {
     let mut cam = PixelCameraBundle::from_resolution(320, 240);
-    cam.transform = Transform::from_translation(Vec3::new(0.0,0.0,10.0));
+    cam.transform = Transform::from_translation(Vec3::new(0.0, 0.0, 10.0));
     commands.spawn(cam);
 }
 
