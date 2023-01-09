@@ -33,7 +33,7 @@ pub enum ControllerAction {
     Interact,
 }
 
-#[derive(Component, Default, Clone, Reflect)]
+#[derive(Component, Default, Clone, Reflect, Copy)]
 #[reflect(Component)]
 pub enum PlayerState {
     #[default]

@@ -50,42 +50,46 @@ pub fn player_input(
         }
         velocity.linvel = direction * time.delta().as_secs_f32() * RUN_SPEED;
 
-        //If something is just pressed, set the state to its 1st frame
-        //If nothing is pressed, default to idle
-
-        if action.just_released(ControllerAction::RunDown) {
-            *state  = PlayerState::Idle;
-        } 
-
-        if action.just_released(ControllerAction::RunUp) {
-            *state  = PlayerState::Idle;
+        if action.just_released(ControllerAction::RunDown)
+            || action.just_released(ControllerAction::RunUp)
+            || action.just_released(ControllerAction::RunLeft)
+            || action.just_released(ControllerAction::RunRight)
+        {
+            *state = pressed(action);
         }
 
-        if action.just_released(ControllerAction::RunLeft) {
-            *state = PlayerState::Idle;
-        } 
-
-        if action.just_released(ControllerAction::RunRight) {
-            *state = PlayerState::Idle;
-        }
-
-
-        if action.just_pressed(ControllerAction::RunDown) {
-            *state  = PlayerState::RunDown(0);
-        } 
-
-        if action.just_pressed(ControllerAction::RunUp) {
-            *state  = PlayerState::RunUp(1);
-        }
-
-        if action.just_pressed(ControllerAction::RunLeft) {
-            *state  = PlayerState::RunLeft(2);
-        } 
-
-        if action.just_pressed(ControllerAction::RunRight) {
-            *state  = PlayerState::RunRight(3);
-        }
+        *state = just_pressed(action, *state);
     }
+}
+
+fn pressed(action: &ActionState<ControllerAction>) -> PlayerState {
+    if action.pressed(ControllerAction::RunUp) {
+        return PlayerState::RunUp(1);
+    } else if action.pressed(ControllerAction::RunDown) {
+        return PlayerState::RunDown(0);
+    }
+    if action.pressed(ControllerAction::RunLeft) {
+        return PlayerState::RunLeft(2);
+    } else if action.pressed(ControllerAction::RunRight) {
+        return PlayerState::RunRight(3);
+    }
+    return PlayerState::Idle;
+}
+
+fn just_pressed(action: &ActionState<ControllerAction>, state: PlayerState) -> PlayerState {
+    if action.just_pressed(ControllerAction::RunUp) {
+        return PlayerState::RunUp(1);
+    } else if action.just_pressed(ControllerAction::RunDown) {
+        return PlayerState::RunDown(0);
+    }
+
+    if action.just_pressed(ControllerAction::RunLeft) {
+        return PlayerState::RunLeft(2);
+    } else if action.just_pressed(ControllerAction::RunRight) {
+        return PlayerState::RunRight(3);
+    }
+
+    return state;
 }
 
 pub fn animate(
