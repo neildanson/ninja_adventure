@@ -77,7 +77,7 @@ fn pressed(action: &ActionState<ControllerAction>) -> PlayerState {
 }
 
 fn just_pressed(action: &ActionState<ControllerAction>, state: PlayerState) -> PlayerState {
-    if action.just_pressed(ControllerAction::RunUp) {
+    if action.just_pressed(ControllerAction::RunUp) && state {
         return PlayerState::RunUp(1);
     } else if action.just_pressed(ControllerAction::RunDown) {
         return PlayerState::RunDown(0);
