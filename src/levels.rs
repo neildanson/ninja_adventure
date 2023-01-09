@@ -167,7 +167,7 @@ pub fn spawn_wall_collision(
                                     / 2.,
                                 (wall_rect.top as f32 - wall_rect.bottom as f32 + 1.)
                                     * grid_size as f32
-                                    / 2.,
+                                    / 1.5, //NLDN - Extend the height a little
                             ))
                             .insert(RigidBody::Fixed)
                             .insert(ColliderDebugColor(Color::RED))
