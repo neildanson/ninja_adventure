@@ -58,7 +58,8 @@ fn main() {
         .add_system_set(
             ConditionSet::new()
                 .run_in_state(GameState::InGame)
-                .with_system(spawn_wall_collision)
+                .with_system(spawn_obstacle_collision::<Tree, 2, 1, 1>)
+                .with_system(spawn_obstacle_collision::<Wall, 3, 2, 0>)
                 .with_system(player_input)
                 .with_system(camera_follow)
                 .with_system(animate)
@@ -67,6 +68,7 @@ fn main() {
         .add_system_set(ConditionSet::new().run_in_state(GameState::GameOver).into())
         .register_ldtk_int_cell::<FloorBundle>(1)
         .register_ldtk_int_cell::<WallBundle>(2)
+        .register_ldtk_int_cell::<TreeBundle>(3)
         .register_ldtk_entity::<PlayerEntityBundle>("PlayerStart")
         .register_type::<PlayerState>()
         .run();

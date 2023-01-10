@@ -5,6 +5,23 @@ use leafwing_input_manager::prelude::*;
 
 use crate::constants::*;
 
+
+#[derive(Copy, Clone, Eq, PartialEq, Debug, Default, Component)]
+pub struct Wall;
+
+#[derive(Clone, Debug, Default, Bundle, LdtkIntCell)]
+pub struct WallBundle {
+    wall: Wall,
+}
+
+#[derive(Copy, Clone, Eq, PartialEq, Debug, Default, Component)]
+pub struct Tree;
+
+#[derive(Clone, Debug, Default, Bundle, LdtkIntCell)]
+pub struct TreeBundle {
+    tree: Tree,
+}
+
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum GameState {
     MainMenu,
