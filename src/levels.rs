@@ -1,24 +1,9 @@
 
 use std::collections::{HashMap, HashSet};
 
-use crate::constants::*;
 use bevy::prelude::*;
 use bevy_ecs_ldtk::prelude::*;
 use bevy_rapier2d::prelude::*;
-
-pub fn level_startup(mut commands: Commands, asset_server: Res<AssetServer>, audio: Res<Audio>) {
-    commands.spawn(LdtkWorldBundle {
-        ldtk_handle: asset_server.load(LEVEL_FILE),
-        ..Default::default()
-    });
-
-    commands.insert_resource(LevelSelection::Index(0));
-
-    audio.play_with_settings(
-        asset_server.load(LEVEL_MUSIC),
-        PlaybackSettings::LOOP.with_volume(0.75),
-    );
-}
 
 pub fn spawn_obstacle_collision<Obstacle, const Q: usize, const P:usize, const O:i32>(
     mut commands: Commands,
