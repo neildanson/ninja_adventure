@@ -5,7 +5,7 @@ use bevy::prelude::*;
 use bevy_ecs_ldtk::prelude::*;
 use bevy_rapier2d::prelude::*;
 
-pub fn spawn_obstacle_collision<Obstacle, const Q: usize, const P:usize, const O:i32>(
+pub fn spawn_obstacle_collision<Obstacle>(
     mut commands: Commands,
     obstacle_query: Query<(&GridCoords, &Parent), Added<Obstacle>>,
     parent_query: Query<&Parent, Without<Obstacle>>,
@@ -145,14 +145,14 @@ pub fn spawn_obstacle_collision<Obstacle, const Q: usize, const P:usize, const O
                                     / 2.,
                                 (obstacle_rect.top as f32 - obstacle_rect.bottom as f32 + 1.)
                                     * grid_size as f32
-                                    / ((Q as f32) / (P as f32)), //use const params to control the size
+                                    / 2., 
                             ))
                             .insert(RigidBody::Fixed)
                             .insert(ColliderDebugColor(Color::RED))
                             .insert(Transform::from_xyz(
                                 (obstacle_rect.left + obstacle_rect.right + 1) as f32 * grid_size as f32
                                     / 2.,
-                                (obstacle_rect.bottom + obstacle_rect.top + 1 + O) as f32 * grid_size as f32
+                                (obstacle_rect.bottom + obstacle_rect.top + 1) as f32 * grid_size as f32
                                     / 2.,
                                 0.,
                             ))

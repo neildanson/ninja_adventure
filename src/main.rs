@@ -58,8 +58,8 @@ fn main() {
         .add_system_set(
             ConditionSet::new()
                 .run_in_state(GameState::InGame)
-                .with_system(spawn_obstacle_collision::<Tree, 2, 1, 1>)
-                .with_system(spawn_obstacle_collision::<Wall, 3, 2, 0>)
+                .with_system(spawn_obstacle_collision::<Tree>)
+                .with_system(spawn_obstacle_collision::<Wall>)
                 .with_system(player_input)
                 .with_system(camera_follow)
                 .with_system(animate)

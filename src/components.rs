@@ -105,7 +105,7 @@ impl From<EntityInstance> for PlayerBundle {
                 rigid_body: RigidBody::Dynamic,
                 velocity: Velocity::default(),
                 locked_axes: LockedAxes::ROTATION_LOCKED,
-                collider: Collider::cuboid(PLAYER_WIDTH / 2.0, PLAYER_HEIGHT / 2.0),
+                collider: Collider::cuboid(PLAYER_WIDTH / 2.0, PLAYER_HEIGHT / 4.0),
                 animation_timer: AnimationTimer(Timer::from_seconds(
                     ANIM_TIMER,
                     TimerMode::Repeating,
