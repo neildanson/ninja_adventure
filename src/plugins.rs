@@ -1,5 +1,5 @@
 use bevy::{app::PluginGroupBuilder, prelude::*, window::close_on_esc};
-use bevy_inspector_egui::prelude::*;
+use bevy_inspector_egui::quick::WorldInspectorPlugin;
 use bevy_rapier2d::render::RapierDebugRenderPlugin;
 
 pub struct DebugPlugin;
@@ -18,7 +18,7 @@ impl PluginGroup for DebugPlugins {
             let group = PluginGroupBuilder::start::<Self>();
             group
                 .add(DebugPlugin)
-                .add(WorldInspectorPlugin::new())
+                .add(WorldInspectorPlugin)
                 .add(RapierDebugRenderPlugin::default())
         } else {
             PluginGroupBuilder::start::<Self>()
