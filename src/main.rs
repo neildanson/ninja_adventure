@@ -67,8 +67,8 @@ fn main() {
         )
         .add_system_set(ConditionSet::new().run_in_state(GameState::GameOver).into())
         .register_ldtk_int_cell::<FloorBundle>(1)
-        .register_ldtk_int_cell::<WallBundle>(2)
-        .register_ldtk_int_cell::<TreeBundle>(3)
+        .register_ldtk_int_cell::<TreeBundle>(2)
+        .register_ldtk_int_cell::<WallBundle>(3)
         .register_ldtk_entity::<PlayerEntityBundle>("PlayerStart")
         .register_type::<PlayerState>()
         .run();
