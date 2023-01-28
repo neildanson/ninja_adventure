@@ -52,59 +52,41 @@ pub fn player_input(
     for (mut velocity, mut state, action) in query.iter_mut() {
         let mut direction = Vec2::ZERO;
 
-        if action.pressed(ControllerAction::RunLeft) {
+        if action.pressed(ControllerAction::RunLeft) && !action.pressed(ControllerAction::RunRight) {
             direction += Vec2::NEG_X;
-        } else if action.pressed(ControllerAction::RunRight) {
+        } else if action.pressed(ControllerAction::RunRight) && !action.pressed(ControllerAction::RunLeft) {
             direction += Vec2::X;
         }
 
-        if action.pressed(ControllerAction::RunUp) {
+        if action.pressed(ControllerAction::RunUp) && !action.pressed(ControllerAction::RunDown) {
             direction += Vec2::Y;
-        } else if action.pressed(ControllerAction::RunDown) {
+        } else if action.pressed(ControllerAction::RunDown) && !action.pressed(ControllerAction::RunUp) {
             direction += Vec2::NEG_Y;
         }
         velocity.linvel = direction * time.delta().as_secs_f32() * RUN_SPEED;
 
-        if action.just_released(ControllerAction::RunDown)
-            || action.just_released(ControllerAction::RunUp)
-            || action.just_released(ControllerAction::RunLeft)
-            || action.just_released(ControllerAction::RunRight)
-        {
-            *state = pressed(action);
+        state_logic(action, &mut state, PlayerState::RunRight(3), ControllerAction::RunRight, ControllerAction::RunLeft);
+        state_logic(action, &mut state, PlayerState::RunLeft(2), ControllerAction::RunLeft, ControllerAction::RunRight);
+        state_logic(action, &mut state, PlayerState::RunUp(1),  ControllerAction::RunUp, ControllerAction::RunDown);
+        state_logic(action, &mut state, PlayerState::RunDown(0), ControllerAction::RunDown, ControllerAction::RunUp);
+
+        if direction == Vec2::ZERO {
+            *state = PlayerState::Idle;
         }
 
-        *state = just_pressed(action, *state);
     }
 }
 
-fn pressed(action: &ActionState<ControllerAction>) -> PlayerState {
-    if action.pressed(ControllerAction::RunUp) {
-        return PlayerState::RunUp(1);
-    } else if action.pressed(ControllerAction::RunDown) {
-        return PlayerState::RunDown(0);
+fn state_logic(action: &ActionState<ControllerAction>, state: &mut PlayerState, new_state : PlayerState, action_to_test : ControllerAction, opposite_action : ControllerAction) {
+    if action.get_just_released().len() == 0 && !action.pressed(opposite_action) {
+        if action.just_pressed(action_to_test) {
+            *state = new_state;
+        } 
+    } else {
+        if action.pressed(action_to_test) {
+            *state = new_state;
+        } 
     }
-    if action.pressed(ControllerAction::RunLeft) {
-        return PlayerState::RunLeft(2);
-    } else if action.pressed(ControllerAction::RunRight) {
-        return PlayerState::RunRight(3);
-    }
-    return PlayerState::Idle;
-}
-
-fn just_pressed(action: &ActionState<ControllerAction>, state: PlayerState) -> PlayerState {
-    if action.just_pressed(ControllerAction::RunUp) {
-        return PlayerState::RunUp(1);
-    } else if action.just_pressed(ControllerAction::RunDown) {
-        return PlayerState::RunDown(0);
-    }
-
-    if action.just_pressed(ControllerAction::RunLeft) {
-        return PlayerState::RunLeft(2);
-    } else if action.just_pressed(ControllerAction::RunRight) {
-        return PlayerState::RunRight(3);
-    }
-
-    return state;
 }
 
 pub fn animate(
